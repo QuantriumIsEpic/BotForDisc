@@ -12,31 +12,7 @@ function randomNum(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
       
-bot.on('message', async message => {
 
-
-
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
-
-    var args = message.content.slice(prefix.length).trim().split(' ');
-    const command = args.shift().toLowerCase();
-    const argSet = message.mentions.channels.first();
-
-    if(command === "setupsuggestionchannel"){
-
-        if (args.length){
-
-            await channelMain.set(message.guild.id, argSet);
-        
-            return
-        
-        }
-
-    }
-
-    
-
-})
 
 bot.on('message', message => {
 
