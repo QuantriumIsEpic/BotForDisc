@@ -1,51 +1,140 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
+const prefix = "!";
+const channelMain = new Keyv('sqlite://path/to.sqlite');
+Number('correct');
+correct = 537;
 
-const token = 'NzE5MjA0MzM5Mjk3NTUwNDA3.Xt0Bhw.5Mg_P33nXOrDHm7EyQceDO25P8g';
 
-const channel = bot.channels.cache.get('719278771949142026');
+function randomNum(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+      
+bot.on('message', async message => {
 
 
-bot.on('ready', () => {
-    console.log('this bot is online!');
+
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+    var args = message.content.slice(prefix.length).trim().split(' ');
+    const command = args.shift().toLowerCase();
+    const argSet = message.mentions.channels.first();
+
+    if(command === "setupsuggestionchannel"){
+
+        if (args.length){
+
+            await channelMain.set(message.guild.id, argSet);
+        
+            return
+        
+        }
+
+    }
+
+    
+
 })
 
-bot.on('message', message=>{
+bot.on('message', message => {
 
-    msg = message.content.toLowerCase();
 
-      if(msg != 'can'){
-          if(message.channel.id === '719230147185868810'){
-          if(message.member != 719204339297550407){
-                message.delete();
-          } 
-      }
-    }
-});
+    if(message.channel.id === '747178708439138486'){
 
-bot.on('message', message =>{
 
-    if (message.member.roles.cache.some(role => role.name === 'Behaviour Watch')){
+        if(message.author.bot) return;
+
+        if(isNaN(message.content, 10) === true){
+
+            message.delete();
+
+            return;
+
+        }
+
+
+        if(parseInt(message.content, 10) === correct){
+
+            
+            message.channel.send(`<@${message.author.id}> HAS WON THE GUESS THE NUMBER CONTEST!`);
+            message.channel.send(`<@${message.author.id}> HAS WON THE GUESS THE NUMBER CONTEST!`);
+            message.channel.send(`<@${message.author.id}> HAS WON THE GUESS THE NUMBER CONTEST!`);
+            message.channel.send(`<@${message.author.id}> HAS WON THE GUESS THE NUMBER CONTEST!`)
+             .then(() => message.pin());
+
+            correct = randomNum(1, 1000);
+
+            console.log(correct);
+           
+            
+        }
+
         
-    const channel = bot.channels.cache.get('719303755232706700')
+    }
 
-    channel.send({embed: {
-        author: {
+})
 
-        name: "BehaviorWatch - Alert",
-        icon_url: bot.user.avatarURL
+bot.on('message', message => {
 
-        },
 
-        title: "A user with the behavior watch role sent a message:",
-        description: message.content
 
-    }})
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
 
+    var args = message.content.slice(prefix.length).trim().split(' ');
+    const command = args.shift().toLowerCase();
+
+    if(command === "suggest"){
+
+        var suggestion = args.join(",").replace(/,/g, " ");
+
+        let embed = new Discord.MessageEmbed()
+             .setColor('#0099ff')
+             .setTitle(message.author.username + " suggests:")
+             .setThumbnail(message.author.avatarURL())
+             .setTimestamp()
+             .setDescription(`${suggestion}`)
+             .setFooter("React below if you like the suggestion!");
+
+
+        channelMain.send(embed).then(sentEmbed => {
+            sentEmbed.react("🔺")
+            sentEmbed.react("🔻")
+        })
 
     }
 
+
+
+})
+
+
+bot.on('message', message => {
+
+
+    if(message.author.bot) return
+
+    if(message.content.toLowerCase().includes('i-')){
+
+        message.reply(`What do you mean "I-"? Is there something more? I need story! ||smh||`);
+
+    }
+
+
+})
+
+ 
+
+bot.on("ready", () =>{
+
+    bot.user.setActivity("yootoobe", {type: "WATCHING"});
+    
 });
 
 
-bot.login(token);
+keyv.on('error', err => console.error('Keyv connection error:', err));
+
+
+bot.login(process.env.token);
+
