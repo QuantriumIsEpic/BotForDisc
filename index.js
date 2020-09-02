@@ -1,3 +1,6 @@
+const Keyv = require('keyv');
+
+const keyv = new Keyv();
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const prefix = "!";
